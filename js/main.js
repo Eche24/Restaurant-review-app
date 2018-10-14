@@ -19,11 +19,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
 fetchNeighborhoods = () => {
 	DBHelper.fetchNeighborhoods((error, neighborhoods) => {
 		if (error) { // Got an error
-		console.error(error);
-	} else {
-		self.neighborhoods = neighborhoods;
-		fillNeighborhoodsHTML();
-	}
+			console.error(error);
+		} else {
+			self.neighborhoods = neighborhoods;
+			fillNeighborhoodsHTML();
+		}
 	});
 };
 
@@ -46,11 +46,11 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
 fetchCuisines = () => {
 	DBHelper.fetchCuisines((error, cuisines) => {
 		if (error) { // Got an error!
-		console.error(error);
-	} else {
-		self.cuisines = cuisines;
-		fillCuisinesHTML();
-	}
+			console.error(error);
+		} else {
+			self.cuisines = cuisines;
+			fillCuisinesHTML();
+		}
 	});
 };
 
@@ -116,11 +116,11 @@ updateRestaurants = () => {
 
 	DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
 		if (error) { // Got an error!
-		console.error(error);
-	} else {
-		resetRestaurants(restaurants);
-		fillRestaurantsHTML();
-	}
+			console.error(error);
+		} else {
+			resetRestaurants(restaurants);
+			fillRestaurantsHTML();
+		}
 	});
 };
 
@@ -193,12 +193,22 @@ addMarkersToMap = (restaurants = self.restaurants) => {
 		const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.newMap);
 		marker.on('click', onClick);
 		function onClick () {
-		window.location.href = marker.options.url;
-	}
+			window.location.href = marker.options.url;
+		}
 		self.markers.push(marker);
 	});
 
 };
+
+// adding service worker
+if ('serviceWorker' in navigator) {
+	navigator.serviceWorker
+	.register('js/service_worker.js')
+	.catch(function (err) {
+		console.log(err);
+	});
+}
+
 /* addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
     // Add marker to the map
