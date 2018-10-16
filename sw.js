@@ -1,9 +1,10 @@
-console.log('Service Worker: Registered');
-const cacheFiles = [
+
+let cacheName = 'v1';
+let urlsToCache = [
 	'/',
 	'/index.html',
 	'/restaurant.html',
-	'/css/styles.css',
+	'/css/style.css',
 	'/js/dbhelper.js',
 	'/js/main.js',
 	'/js/restaurant_info.js',
@@ -19,35 +20,31 @@ const cacheFiles = [
 	'/img/9.jpg',
 	'/img/10.jpg',
 ];
-self.addEventListener('install', function (e) {
-	e.waitUntil(
-      caches.open('v1').then(function (cache) {
-	return cache.addAll(cacheFiles);
+
+// Install the service worker
+self.addEventListener('install', function (event) {
+	event.waitUntil(
+    caches.open(cacheName).then(function (cache) {
+	console.log('Opened cache');
+	return cache.addAll(urlsToCache);
 })
-    );
+  );
 });
 
-self.addEventListener('fetch', function (e) {
-	e.respondWith(
-    caches.match(e.request).then(function (response) {
+// Activate
+self.addEventListener('activate', function (event) {
+	console.log('Activated');
+});
+
+
+// Cache and return requests
+self.addEventListener('fetch', function (event) {
+	event.respondWith(
+    caches.match(event.request).then(function (response) {
 	if (response) {
-	console.log('found ', e.request, 'in cache');
-	return response;
-}
-	else {
-	console.log('could not find', e.request, 'in cache, FETCHING');
-	return fetch(e.request)
-       .then(function (response) {
-	const clonedResponse = response.clone();
-	caches.open('v1').then(function (cache) {
-	cache.put(e.request, clonedResponse);
-});
-	return response;
-})
-       .catch(function (err) {
-	console.error(err);
-});
-}
+		return response;
+	}
+	return fetch(event.request);
 })
   );
 });

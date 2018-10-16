@@ -202,13 +202,21 @@ addMarkersToMap = (restaurants = self.restaurants) => {
 };
 
 // adding service worker
+// if ('serviceWorker' in navigator) {
+// 	navigator.serviceWorker
+// 	.register('./sw.js')
+// 	.catch(function (err) {
+// 		console.log(err);
+// 	});
+// }
+
 if ('serviceWorker' in navigator) {
-	navigator.serviceWorker
-	.register('./sw.js')
-	.catch(function (err) {
-		console.log(err);
+	window.addEventListener('load', function() {
+	  navigator.serviceWorker.register('./sw.js')
+			   .then(function(){ console.log("Service Worker Registered"); 
+	  });
 	});
-}
+  }
 
 /* addMarkersToMap = (restaurants = self.restaurants) => {
   restaurants.forEach(restaurant => {
