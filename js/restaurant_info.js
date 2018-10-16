@@ -13,26 +13,26 @@ document.addEventListener('DOMContentLoaded', (event) => {
  */
 initMap = () => {
 	fetchRestaurantFromURL((error, restaurant) => {
-	if (error) { // Got an error!
-	console.error(error);
-} else {
-	self.newMap = L.map('map', {
-	center: [restaurant.latlng.lat, restaurant.latlng.lng],
-	zoom: 16,
-	scrollWheelZoom: false,
-});
-	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
-	mapboxToken: 'pk.eyJ1IjoiZWNoZW5nYmVkZSIsImEiOiJjam43Y3ZhdGYwMnUyM3BwNmg4MWtnenp6In0.Plj0v4JY-lTdWWIGlYbw2w',
-	maxZoom: 18,
-	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, '
+		if (error) { // Got an error!
+			console.error(error);
+		} else {
+			self.newMap = L.map('map', {
+				center: [restaurant.latlng.lat, restaurant.latlng.lng],
+				zoom: 16,
+				scrollWheelZoom: false,
+			});
+			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.jpg70?access_token={mapboxToken}', {
+				mapboxToken: 'pk.eyJ1IjoiZWNoZW5nYmVkZSIsImEiOiJjam43Y3ZhdGYwMnUyM3BwNmg4MWtnenp6In0.Plj0v4JY-lTdWWIGlYbw2w',
+				maxZoom: 18,
+				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, '
           + '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, '
           + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-	id: 'mapbox.streets',
-}).addTo(newMap);
-	fillBreadcrumb();
-	DBHelper.mapMarkerForRestaurant(self.restaurant, self.newMap);
-}
-});
+				id: 'mapbox.streets',
+			}).addTo(newMap);
+			fillBreadcrumb();
+			DBHelper.mapMarkerForRestaurant(self.restaurant, self.newMap);
+		}
+	});
 };
 
 /* window.initMap = () => {
@@ -56,24 +56,24 @@ initMap = () => {
  */
 fetchRestaurantFromURL = (callback) => {
 	if (self.restaurant) { // restaurant already fetched!
-	callback(null, self.restaurant);
-	return;
-}
+		callback(null, self.restaurant);
+		return;
+	}
 	const id = getParameterByName('id');
 	if (!id) { // no id found in URL
-	error = 'No restaurant id in URL';
-	callback(error, null);
-} else {
-	DBHelper.fetchRestaurantById(id, (error, restaurant) => {
-	self.restaurant = restaurant;
-	if (!restaurant) {
-	console.error(error);
-	return;
-}
-	fillRestaurantHTML();
-	callback(null, restaurant);
-});
-}
+		error = 'No restaurant id in URL';
+		callback(error, null);
+	} else {
+		DBHelper.fetchRestaurantById(id, (error, restaurant) => {
+			self.restaurant = restaurant;
+			if (!restaurant) {
+				console.error(error);
+				return;
+			}
+			fillRestaurantHTML();
+			callback(null, restaurant);
+		});
+	}
 };
 
 /**
@@ -82,12 +82,15 @@ fetchRestaurantFromURL = (callback) => {
 fillRestaurantHTML = (restaurant = self.restaurant) => {
 	const name = document.getElementById('restaurant-name');
 	name.innerHTML = restaurant.name;
+	name.tabindex = 0;
 
 	const address = document.getElementById('restaurant-address');
 	address.innerHTML = restaurant.address;
+	address.tabindex = 0;
 
 	const image = document.getElementById('restaurant-img');
 	image.className = 'restaurant-img';
+	image.alt = 'Image of ' + restaurant.name;
 	image.src = DBHelper.imageUrlForRestaurant(restaurant);
 
 	const cuisine = document.getElementById('restaurant-cuisine');
@@ -95,8 +98,8 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   // fill operating hours
 	if (restaurant.operating_hours) {
-	fillRestaurantHoursHTML();
-}
+		fillRestaurantHoursHTML();
+	}
   // fill reviews
 	fillReviewsHTML();
 };
@@ -107,18 +110,18 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
 	const hours = document.getElementById('restaurant-hours');
 	for (let key in operatingHours) {
-	const row = document.createElement('tr');
+		const row = document.createElement('tr');
 
-	const day = document.createElement('td');
-	day.innerHTML = key;
-	row.appendChild(day);
+		const day = document.createElement('td');
+		day.innerHTML = key;
+		row.appendChild(day);
 
-	const time = document.createElement('td');
-	time.innerHTML = operatingHours[key];
-	row.appendChild(time);
+		const time = document.createElement('td');
+		time.innerHTML = operatingHours[key];
+		row.appendChild(time);
 
-	hours.appendChild(row);
-}
+		hours.appendChild(row);
+	}
 };
 
 /**
@@ -131,15 +134,15 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 	container.appendChild(title);
 
 	if (!reviews) {
-	const noReviews = document.createElement('p');
-	noReviews.innerHTML = 'No reviews yet!';
-	container.appendChild(noReviews);
-	return;
-}
+		const noReviews = document.createElement('p');
+		noReviews.innerHTML = 'No reviews yet!';
+		container.appendChild(noReviews);
+		return;
+	}
 	const ul = document.getElementById('reviews-list');
 	reviews.forEach(review => {
-	ul.appendChild(createReviewHTML(review));
-});
+		ul.appendChild(createReviewHTML(review));
+	});
 	container.appendChild(ul);
 };
 
@@ -182,13 +185,13 @@ fillBreadcrumb = (restaurant = self.restaurant) => {
  */
 getParameterByName = (name, url) => {
 	if (!url)
-	{url = window.location.href;}
+	{ url = window.location.href; }
 	name = name.replace(/[\[\]]/g, '\\$&');
 	const regex = new RegExp(`[?&]${name}(=([^&#]*)|&|#|$)`),
-	results = regex.exec(url);
+		results = regex.exec(url);
 	if (!results)
-	{return null;}
+	{ return null; }
 	if (!results[2])
-	{return '';}
+	{ return ''; }
 	return decodeURIComponent(results[2].replace(/\+/g, ' '));
 };
