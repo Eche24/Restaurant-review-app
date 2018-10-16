@@ -1,4 +1,4 @@
-// console.log('Service Worker: Registered');
+console.log('Service Worker: Registered');
 const cacheFiles = [
 	'/',
 	'/index.html',
