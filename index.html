@@ -25,12 +25,12 @@
     <section>
       <div class="filter-options">
         <h2>Filter Results</h2>
-        <label id="neighborhoods-select" name="neighborhoods" tabindex="0" onchange="updateRestaurants()" >
+        <select id="neighborhoods-select" name="neighborhoods" tabindex="0" onchange="updateRestaurants()" >
           <option value="all">All Neighborhoods</option>
-        </label>
-        <label id="cuisines-select" name="cuisines" tabindex="0" onchange="updateRestaurants()">
+        </select>
+        <select d="cuisines-select" name="cuisines" tabindex="0" onchange="updateRestaurants()">
           <option value="all">All Cuisines</option>
-        </label>
+        </select>
       </div>
       <ul id="restaurants-list"></ul>
     </section>
