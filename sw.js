@@ -1,5 +1,5 @@
 
-let cacheName = 'v1';
+let cache_name = 'v1';
 let urlsToCache = [
 	'/',
 	'/index.html',
@@ -24,7 +24,7 @@ let urlsToCache = [
 // Install the service worker
 self.addEventListener('install', function (event) {
 	event.waitUntil(
-    caches.open(cacheName).then(function (cache) {
+    caches.open(cache_name).then(function (cache) {
 	console.log('Opened cache');
 	return cache.addAll(urlsToCache);
 })
